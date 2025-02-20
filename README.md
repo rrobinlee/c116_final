@@ -73,7 +73,9 @@ It is important to note that even though there are many predictors that increase
 Applying these aforementioned concepts, we construct the Hierarchical Shrinkage Family and the Horseshoe Prior model. With our Generalized Bayesian model, we are able to plot each variable’s signal and identify which predictors have a non-zero coefficient. As such, we locate the factors that prove to increase a patient’s mortality risk after contracting COVID-19 by distinguishing which predictors deviate from the line at 0. In order to present this data in a detailed and comprehensive manner, we create two plots that essentially both display the coefficients, with the first graph exemplifying each variable’s distribution and the second graph highlighting the actual value of the coefficient. 
 
 Figure 1: Horseshoe Prior on Regression Parameters in COVID-19 Patient Data
-![image](https://github.com/user-attachments/assets/ffba2231-e5a0-4c54-a3ae-4ecd74630c33)
+
+![image](https://github.com/user-attachments/assets/43b9df27-c903-4f37-83ec-1c055c19da94)
+
 
 From the Figure 1, we can see that the following parameters significantly increase a patient’s mortality risk following their exposure to COVID-19 and are all strong predictors: Peripheral Vascular Disease (`PVD`), End-Stage Renal Disease (`Renal`), Stroke (`Stroke`), Syncope (`OldSyncope`), Age (`Age`), Temperature (`Temp`), Mean Arterial Pressure in mmHg (`MAP`), Alanine Aminotransferase in U/liter (`AST`), Lymphocyte (`Lympho`), Interleukin-6 in pg/ml (`IL-6`), Ferritin (specifically Ferritin > 300: `Ferritin_gt_300`), Procalcitonin (`Procalcitonin`), 	C-reactive Protein (`CrctProtein`), Troponin (`Troponin`). By implementing the Horseshoe Prior, we identify the parameters with the largest signals in relation to the `Death` parameter. Because we are evaluating the mortality risk of COVID-19, the response variable is whether or not a patient has died; thus, we use these variables in a Logistic Regression model to highlight which factors have the highest mortality rate. 
 
@@ -108,12 +110,14 @@ From our results (not shown), the parameter estimates no longer have test statis
 The parameters in the estimates section (other than the coefficients we have entered into the model) are sigma—which  represents the standard deviation of errors—amd mean_ppd—the mean of the posterior predictive distribution of our outcome variable, `Death`. Finally, log-posterior is analogous to the likelihood; this represents the log of the combined posterior distributions, which will be used for model comparisons. 
 
 Figure 2: Scrunched Pairs Plot of Logistic Regression for Risk Factors
-![image](https://github.com/user-attachments/assets/69862563-7793-43b1-a571-1164ec90ce36)
+
+![image](https://github.com/user-attachments/assets/46640aa2-3eef-493a-bd28-8a999b5d8ef6)
 
 The above density plots confirm that our estimates are normal, which means that we know the central limit theorem is effective. Our scrunched pairs plot takes a closer look at the distribution of each parameter. Noticeably, each predictor has a peak that is above or below 0, indicating that they are significant. For example, we can see that `Age` and `MAP` are strong indicators for COVID-related mortality.
 
 Figure 3: Factor-Analysis-Based Logistic Regression for risk factors associated with COVID-19 mortality
-![image](https://github.com/user-attachments/assets/309f040c-0157-4e7f-bee9-3158dc01d063)
+
+![image](https://github.com/user-attachments/assets/e041071a-eda7-4b65-b88a-3e464f7a7fc2)
 
 Unlike in the Frequentist regression—where there is always a solution using ordinary least squares, in Bayesian models, we have to check to make sure the model converged. If a model converges, then we are confident that the parameter estimates are stable. Otherwise, our results are unreliable. In Bayesian estimation, posterior distributions are sampled in groups, known as chains. We can measure the stability of our estimates by comparing the variance within chains to the variance across chains, which is denoted by the R-hat statistic. In general, we want all R-hat values to be close to 1 in order to conclude the model has converged, as in this example. Taking a look at Figure 3 (right), we can see our model fits the observed data pretty well, which allows us to make inferences about the data and shows that our model is accurate. 
 
@@ -136,7 +140,7 @@ $P(y_i^{new} | y_1,...,y_n) = \int_{}^{} P(y_i^{new} | \theta) P(\theta | y_1, .
 
 For each prediction, we are calculating the log-likelihood (probability) of each observation given our model. We obtain the ELPD by averaging the log-likelihood of each observations in the dataset, since it shows how well the model predicts the data. Thus, because we want to construct a model that has a high probability of producing a dataset relatively similar to our original data, we focus on the new dataset’s ELPD after the generating process:
 
-![image](https://github.com/user-attachments/assets/eea9bda1-7428-44e7-8e88-0890d2b1027c)
+![image](https://github.com/user-attachments/assets/47943d17-37b1-4f89-859c-61ff352d63ef)
 
 If our model has a high probability of generating a dataset similar to the one we are using, then we are confident that it should be a good model. In general, a model with a higher ELPD is considered to be a better fit for the data and more likely to make accurate predictions of new data.
 
@@ -168,7 +172,8 @@ Using the predictors we found through the Horseshoe prior, the model we are test
 In order to measure how well our chosen relevant variables predict the response variable, we plot the ELPD and the root mean squared error (RMSE) of each predictor: 
 
 Figure 4: Expected Log Pointwise Predictive Density Validation
-![image](https://github.com/user-attachments/assets/3eabe223-1871-45e1-9006-c45ea942f6b3)
+
+![image](https://github.com/user-attachments/assets/d13f3a86-d2f7-43b0-8aaf-f06f8c4325b1)
 
 Using the `cv_varsel` method, we are able to implement cross-validation to see how many of variables should be included in our final model. Because we want to measure how accurate our model is and compare $y_i$ (the removed observation) to the posterior predictive for $y_i$, we use the root mean squared error to measure the distance between the actual value and the predicted value. In the plot above (Figure 4), the line measures the overall quality of the fit.
 
@@ -177,7 +182,8 @@ Thus, we need to find the x value that ensures the line is the most optimal; thi
 Comparing the Expected Log Pointwise Predictive Density relative to the full model:
 
 Figure 5: Expected Log Pointwise Predictive Density Validation Relative to the Full Model
-![image](https://github.com/user-attachments/assets/96841a2f-d269-461f-96ba-62eaafc615ab)
+
+![image](https://github.com/user-attachments/assets/3da15c8a-d078-4bfc-ae8f-bb76e5ee3c7b)
 
 Therefore, after plotting the ELPD and the root mean squared error (RMSE) in Figure 4 and 5, we see the model start to over-fit after about 9 predictors. This is because the number of predictors that is closest to the dotted line is around 9, and we do not want to risk decreasing the quality of our fit by including too many parameters. However, while we believe the ideal number of variables is 9, we decide to use the 11 predictors as mentioned in the Section 2.2 Constructing the Logistic Regression Model; this is because we believe that several of the predictors (such as `Age` and `Stroke`) work hand-in-hand to increase COVID-19 mortality risk. Thus, in order to better encapsulate the data, we implement a few more parameters to our model than recommended. Comparing to the full model (Figure 5), the two plots are extremely similar. 
 
