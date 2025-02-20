@@ -1,3 +1,5 @@
+# Written by Robin Lee
+
 require(bayesplot)
 require(rstanarm)
 require(readxl)
@@ -6,8 +8,6 @@ require(ggplot2)
 require(gridExtra)
 library(projpred)
 library(bayestestR)
-
-covid <- read_excel("covid_mortality.xlsx")
 
 # Tidying the data
 
