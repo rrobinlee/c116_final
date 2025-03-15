@@ -70,7 +70,30 @@ After specifying our prior guess for the number of relevant variables that we be
 
 It is important to note that even though there are many predictors that increase a patient's risk, we will not implement all non-zero coefficients in our final model. For example, while we are confident that the severity of a patient’s symptoms (‘severity’) and their length of stay at the hospital (‘LOS’) will definitely contribute to an individual’s mortality risk, we will not use these variables in our final model; this is because we are focusing specifically on pre-existing conditions and patient attributes. However, in order to fully analyze the dataset, our initial fit, named `fit`, contains all the parameters in our tidied dataset. 
 
-Applying these aforementioned concepts, we construct the Hierarchical Shrinkage Family and the Horseshoe Prior model. With our Generalized Bayesian model, we are able to plot each variable’s signal and identify which predictors have a non-zero coefficient. As such, we locate the factors that prove to increase a patient’s mortality risk after contracting COVID-19 by distinguishing which predictors deviate from the line at 0. In order to present this data in a detailed and comprehensive manner, we create two plots that essentially both display the coefficients, with the first graph exemplifying each variable’s distribution and the second graph highlighting the actual value of the coefficient. 
+Applying these aforementioned concepts, we construct the Hierarchical Shrinkage Family and the Horseshoe Prior model. 
+
+```
+p_nonzero <- 10
+tau0 <- p_nonzero/(p-p_nonzero) * 1/sqrt(n)
+hs_prior <- hs(df=1, global_df=1, global_scale=tau0)
+t_prior <- student_t(df = 7, location = 0, scale = 2.5)
+fit <- stan_glm(y ~ LOS + Age_Range + Severity + Black + White + Asian + Latino +
+                  MI + PVD + CHF + DEMENT + COPD + DM_C + DM_S + Renal + All_CNS + 
+                  Pure_CNS + Stroke + Seizure + OldSyncope + OldOtherNeuro + 
+                  OtherBrnLsn + Age + OsSats + OSat_lt_94 + Temp + Temp_gt_38 + 
+                  MAP + MAP_lt_70 + Ddimer + Ddimer_gt_3 + Plts + INR + INR_gt_1.2 + 
+                  BUN + BUN_gt_30 + Creatinine + Sodium + Sodium_bt_139_154 + 
+                  Glucose + Glucose_bt_60_500 + AST + AST_gt_40 + ALT + ALT_gt_40 + 
+                  WBC + WBC_bt_1_4 + Lympho + Lympho_lt_1 + IL6 + IL6_gt_150 + 
+                  Ferritin + Ferritin_gt_300 + CrctProtein + CrctProtein_gt_10 + 
+                  Procalcitonin + Procalciton_gt_0 + Troponin + Troponin_gt_0, 
+                data = covid1, family=binomial(),
+                prior = hs_prior, prior_intercept = t_prior, 
+                seed = 1, adapt_delta = 0.99, refresh=0)
+```
+
+
+With our Generalized Bayesian model, we are able to plot each variable’s signal and identify which predictors have a non-zero coefficient. As such, we locate the factors that prove to increase a patient’s mortality risk after contracting COVID-19 by distinguishing which predictors deviate from the line at 0. In order to present this data in a detailed and comprehensive manner, we create two plots that essentially both display the coefficients, with the first graph exemplifying each variable’s distribution and the second graph highlighting the actual value of the coefficient. 
 
 Figure 1: Horseshoe Prior on Regression Parameters in COVID-19 Patient Data
 
