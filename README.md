@@ -1,4 +1,4 @@
-# Using Bayesian Inference to Identify Medical Conditions and Patient Characteristics that Increase the Mortality Risk of COVID-19 Patients
+# Using Bayesian Inference to Identify Medical Conditions and Patient Characteristics that Increase COVID-19 Mortality
 
 **Author:** *Robin Lee*, *Ahmed Awadalla*
 
