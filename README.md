@@ -1,6 +1,4 @@
-# STATS C116 Final
-
-## Using Bayesian Analysis and Inference to Identify Medical Conditions and Patient Characteristics that Increase the Mortality Risk of COVID-19 Patients
+# Using Bayesian Inference to Identify Medical Conditions and Patient Characteristics that Increase the Mortality Risk of COVID-19 Patients
 
 **Author:** *Robin Lee*, *Ahmed Awadalla*
 
